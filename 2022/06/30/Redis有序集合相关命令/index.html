@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Redis有序集合相关命令 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="概念有序集合和散列一样，都用于存储键值对。在有序集合里，键被称为成员，每个成员都是独一无二的，有序集合的值被称为分值，分值必须为浮点数。有序结合还是redis里唯一一个既可以根据key又可以根据value来排列顺序访问的元素结构。如果成员的分值都是0，会按照成员的名字排序。 zadd123456127.0.0.1:6379&gt; zadd zset-key 728 member1(integer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis有序集合相关命令">
+<meta property="og:url" content="http://example.com/2022/06/30/Redis%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="概念有序集合和散列一样，都用于存储键值对。在有序集合里，键被称为成员，每个成员都是独一无二的，有序集合的值被称为分值，分值必须为浮点数。有序结合还是redis里唯一一个既可以根据key又可以根据value来排列顺序访问的元素结构。如果成员的分值都是0，会按照成员的名字排序。 zadd123456127.0.0.1:6379&gt; zadd zset-key 728 member1(integer">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-30T09:56:21.000Z">
+<meta property="article:modified_time" content="2022-06-30T09:57:00.117Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Redis有序集合相关命令" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/06/30/Redis%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" class="article-date">
+  <time class="dt-published" datetime="2022-06-30T09:56:21.000Z" itemprop="datePublished">2022-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Redis有序集合相关命令
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>有序集合和散列一样，都用于存储键值对。在有序集合里，键被称为成员，每个成员都是独一无二的，有序集合的值被称为分值，分值必须为浮点数。有序结合还是redis里唯一一个既可以根据key又可以根据value来排列顺序访问的元素结构。如果成员的分值都是0，会按照成员的名字排序。</p>
+<h3 id="zadd"><a href="#zadd" class="headerlink" title="zadd"></a>zadd</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd zset-key 728 member1</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd zset-key 982 member2</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd zset-key 982 member2</span><br><span class="line">(integer) 0</span><br></pre></td></tr></table></figure>
+<p>将一个带有给定分值的成员添加到有序集合里，命令执行完后会返回新添加元素的数量。</p>
+<h3 id="zrange"><a href="#zrange" class="headerlink" title="zrange"></a>zrange</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrange zset-key 0 -1</span><br><span class="line">1) &quot;member3&quot;</span><br><span class="line">2) &quot;member1&quot;</span><br><span class="line">3) &quot;member2&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrange zset-key 0 -1 withscores</span><br><span class="line">1) &quot;member3&quot;</span><br><span class="line">2) &quot;500&quot;</span><br><span class="line">3) &quot;member1&quot;</span><br><span class="line">4) &quot;728&quot;</span><br><span class="line">5) &quot;member2&quot;</span><br><span class="line">6) &quot;982&quot;</span><br></pre></td></tr></table></figure>
+<p>根据元素在有序排列中所处的位置，从有序集合里获取多个元素。根据元素从小到大排序。加上withscores会输出分值，不加只输出成员名字。</p>
+<h3 id="zrangebyscore"><a href="#zrangebyscore" class="headerlink" title="zrangebyscore"></a>zrangebyscore</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrangebyscore zset-key 700 1000</span><br><span class="line">1) &quot;member1&quot;</span><br><span class="line">2) &quot;member2&quot;</span><br><span class="line">127.0.0.1:6379&gt; zrangebyscore zset-key 700 1000 withscores</span><br><span class="line">1) &quot;member1&quot;</span><br><span class="line">2) &quot;728&quot;</span><br><span class="line">3) &quot;member2&quot;</span><br><span class="line">4) &quot;982&quot;</span><br></pre></td></tr></table></figure>
+<p>根据分值获取一部分元素。</p>
+<h3 id="zrem"><a href="#zrem" class="headerlink" title="zrem"></a>zrem</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrem zset-key member1</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; zrem zset-key member1</span><br><span class="line">(integer) 0</span><br></pre></td></tr></table></figure>
+<p>移除有序集合里的元素，命令会返回被移除元素的数量。</p>
+<h3 id="zrank"><a href="#zrank" class="headerlink" title="zrank"></a>zrank</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrank test1 b</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<p>返回成员在有序列表中的排名，从0开始</p>
+<h3 id="zrevrank、zrevrange等添加了rev的命令都是按照从大到小的顺序计算获取结果"><a href="#zrevrank、zrevrange等添加了rev的命令都是按照从大到小的顺序计算获取结果" class="headerlink" title="zrevrank、zrevrange等添加了rev的命令都是按照从大到小的顺序计算获取结果"></a>zrevrank、zrevrange等添加了rev的命令都是按照从大到小的顺序计算获取结果</h3><h3 id="交并集运算"><a href="#交并集运算" class="headerlink" title="交并集运算"></a>交并集运算</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zinterstore test-ii 2 test1 test2 aggregate max</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; zrange test-ii 0 -1 withscores</span><br><span class="line">1) &quot;c&quot;</span><br><span class="line">2) &quot;3&quot;</span><br><span class="line">3) &quot;d&quot;</span><br><span class="line">4) &quot;4&quot;</span><br><span class="line">127.0.0.1:6379&gt; zunionstore test-u 2 test1 test2 aggregate min</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; zrange test-u 0 -1 withscores</span><br><span class="line"> 1) &quot;a&quot;</span><br><span class="line"> 2) &quot;1&quot;</span><br><span class="line"> 3) &quot;e&quot;</span><br><span class="line"> 4) &quot;1&quot;</span><br><span class="line"> 5) &quot;b&quot;</span><br><span class="line"> 6) &quot;2&quot;</span><br><span class="line"> 7) &quot;c&quot;</span><br><span class="line"> 8) &quot;2&quot;</span><br><span class="line"> 9) &quot;d&quot;</span><br><span class="line">10) &quot;3&quot;</span><br><span class="line">11) &quot;f&quot;</span><br><span class="line">12) &quot;5&quot;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/06/30/Redis%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" data-id="cl50uwzni0006ywfccvbj2m6e" data-title="Redis有序集合相关命令" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/06/30/Redis%E9%9B%86%E5%90%88%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Redis集合相关命令
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/06/30/Redis%E5%88%97%E8%A1%A8%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Redis列表相关命令</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/06/30/Redis%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">Redis字符串相关命令</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/30/Redis%E6%95%A3%E5%88%97%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">Redis散列相关命令</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/30/Redis%E9%9B%86%E5%90%88%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">Redis集合相关命令</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/30/Redis%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">Redis有序集合相关命令</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/30/Redis%E5%88%97%E8%A1%A8%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">Redis列表相关命令</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
