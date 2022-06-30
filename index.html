@@ -74,9 +74,13 @@
     <article id="post-Redis列表相关命令" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/06/30/Redis%E5%88%97%E8%A1%A8%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" class="article-date">
-  <time class="dt-published" datetime="2022-06-30T09:40:30.000Z" itemprop="datePublished">2022-06-30</time>
+  <time class="dt-published" datetime="2022-06-30T09:52:21.000Z" itemprop="datePublished">2022-06-30</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -108,135 +112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2022/06/30/Redis%E5%88%97%E8%A1%A8%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" data-id="cl50u797s0001rkfcbflnav74" data-title="Redis列表相关命令" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-Ubuntu服务器搭建kafka集群" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/06/30/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BAkafka%E9%9B%86%E7%BE%A4/" class="article-date">
-  <time class="dt-published" datetime="2022-06-30T09:29:39.000Z" itemprop="datePublished">2022-06-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/06/30/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BAkafka%E9%9B%86%E7%BE%A4/">Ubuntu服务器搭建kafka集群</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>zookeeper和kafka的配置文件说明参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/luotianshuai/p/5206662.html">https://www.cnblogs.com/luotianshuai/p/5206662.html</a></p>
-<h3 id="安装Java"><a href="#安装Java" class="headerlink" title="安装Java"></a>安装Java</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install  openjdk-8-jdk</span><br></pre></td></tr></table></figure>
-<h3 id="下载稳定版kafka二进制文件包"><a href="#下载稳定版kafka二进制文件包" class="headerlink" title="下载稳定版kafka二进制文件包"></a>下载稳定版kafka二进制文件包</h3><p>官网下载Kafka：<a target="_blank" rel="noopener" href="http://kafka.apache.org/downloads">http://kafka.apache.org/downloads</a></p>
-<h3 id="创建目录，并解压到该目录"><a href="#创建目录，并解压到该目录" class="headerlink" title="创建目录，并解压到该目录"></a>创建目录，并解压到该目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /usr/local/kafka</span><br><span class="line">tar zxvf kafka_2.13-2.8.0.tgz -C /usr/local/kafka</span><br></pre></td></tr></table></figure>
-<h3 id="配置zookeeper集群"><a href="#配置zookeeper集群" class="headerlink" title="配置zookeeper集群"></a>配置zookeeper集群</h3><h5 id="zookeeper的配置文件在文件包的config目录下，名字叫做zookeeper-properties-需要修改添加的项如下："><a href="#zookeeper的配置文件在文件包的config目录下，名字叫做zookeeper-properties-需要修改添加的项如下：" class="headerlink" title="zookeeper的配置文件在文件包的config目录下，名字叫做zookeeper.properties,需要修改添加的项如下："></a>zookeeper的配置文件在文件包的config目录下，名字叫做<code>zookeeper.properties</code>,需要修改添加的项如下：</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dataDir=/tmp/zookeeper</span><br><span class="line">....</span><br><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">server.1=172.20.60.110:2888:3888</span><br><span class="line">server.2=172.20.60.108:2888:3888</span><br></pre></td></tr></table></figure>
-<ul>
-<li>dataDir快照日志的存储路径</li>
-<li>dataLogDir 上边没列出来，这个是事物日志的存储路径，如果不配置这个那么事物日志会默认存储到dataDir制定的目录，这样会严重影响zk的性能，当zk吞吐量较大的时候，产生的事物日志、快照日志太多</li>
-<li>tickTime、initLimit、syncLimit是必须的参数，不配置启动会失败，如果是单节点的话不用配置，这三个参数是和集群相关的。server.1、server.2也是，非集群搭建不用配置。</li>
-<li>tickTime这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。</li>
-<li>initLimit是用来配置 Zookeeper 接受客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 5个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5*2000&#x3D;10 秒</li>
-<li>syncLimit这个配置项标识 Leader 与Follower 之间发送消息，请求和应答时间长度，最长不能超过多少个 tickTime 的时间长度，总的时间长度就是5*2000&#x3D;10秒</li>
-<li>server.1、server.2是zookeeper集群的每个节点的编号，IP是机器的IP地址，后边的两个端口第一个端口是master和slave之间的通信端口，默认是2888，第二个端口是leader选举的端口，集群刚启动的时候选举或者leader挂掉之后进行新的选举的端口默认是3888</li>
-</ul>
-<h5 id="创建myid文件，路径在上边dataDir指定的路径下，内容是有序的数字，根据机器节点的个数指定，myid是zk集群用来发现彼此的标识，必须创建，且不能相同"><a href="#创建myid文件，路径在上边dataDir指定的路径下，内容是有序的数字，根据机器节点的个数指定，myid是zk集群用来发现彼此的标识，必须创建，且不能相同" class="headerlink" title="创建myid文件，路径在上边dataDir指定的路径下，内容是有序的数字，根据机器节点的个数指定，myid是zk集群用来发现彼此的标识，必须创建，且不能相同"></a>创建myid文件，路径在上边dataDir指定的路径下，内容是有序的数字，根据机器节点的个数指定，myid是zk集群用来发现彼此的标识，必须创建，且不能相同</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim myid</span><br><span class="line">cat myid</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-<h3 id="启动zookeeper"><a href="#启动zookeeper" class="headerlink" title="启动zookeeper"></a>启动zookeeper</h3><h5 id="进入kafka目录-执行启动zookeeper命令"><a href="#进入kafka目录-执行启动zookeeper命令" class="headerlink" title="进入kafka目录 执行启动zookeeper命令"></a>进入kafka目录 执行启动zookeeper命令</h5><p>第一次启动可以先不加-daemon参数，让他前台运行，看下有没有报错，无误再加上让zookeeper保持后台运行。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/zookeeper-server-start.sh config/zookeeper.properties</span><br></pre></td></tr></table></figure>
-<h3 id="配置kafka"><a href="#配置kafka" class="headerlink" title="配置kafka"></a>配置kafka</h3><h5 id="编辑kafka的配置文件，在config目录下的server-properties文件里，需要注意下边的几个项"><a href="#编辑kafka的配置文件，在config目录下的server-properties文件里，需要注意下边的几个项" class="headerlink" title="编辑kafka的配置文件，在config目录下的server.properties文件里，需要注意下边的几个项"></a>编辑kafka的配置文件，在config目录下的server.properties文件里，需要注意下边的几个项</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">broker.id=1</span><br><span class="line">listeners=PLAINTEXT://192.168.0.1:9092</span><br><span class="line">advertised.listeners=PLAINTEXT://118.124.46.67:9092 </span><br><span class="line">log.dirs=/tmp/kafka-logs</span><br><span class="line">zookeeper.connect=localhost:2181,172.20.60.110:2181</span><br></pre></td></tr></table></figure>
-<ul>
-<li>broker.id 每个节点要配置不同的值</li>
-<li>listeners 内网访问的IP port</li>
-<li>advertised.listeners 外网ip port</li>
-<li>log.dirs 日志目录</li>
-<li>zookeeper.connect 单节点这个参数不用改，集群的话要加上所有的集群的zookeeper的IP port</li>
-</ul>
-<h3 id="启动kafka"><a href="#启动kafka" class="headerlink" title="启动kafka"></a>启动kafka</h3><h5 id="进入kafka目录-执行启动kafka命令"><a href="#进入kafka目录-执行启动kafka命令" class="headerlink" title="进入kafka目录 执行启动kafka命令"></a>进入kafka目录 执行启动kafka命令</h5><p>第一次启动可以先不加-daemon参数，让他前台运行，看下有没有报错，无误再加上让kafka保持后台运行。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-server-start.sh –daemon config/server.properties</span><br></pre></td></tr></table></figure>
-
-<h3 id="调试kafka集群"><a href="#调试kafka集群" class="headerlink" title="调试kafka集群"></a>调试kafka集群</h3><h5 id="在其中一个节点上创建一个topic"><a href="#在其中一个节点上创建一个topic" class="headerlink" title="在其中一个节点上创建一个topic"></a>在其中一个节点上创建一个topic</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-topics.sh --create --zookeeper 172.20.60.108:2181,172.20.60.110:2181 --replication-factor 2 --partitions 2 --topic test108</span><br></pre></td></tr></table></figure>
-<ul>
-<li>–replication-factor 2   #复制两份</li>
-<li>–partitions 1 #创建1个分区</li>
-<li>–topic #主题为test108</li>
-</ul>
-<h5 id="去另一个节点上查看topic，看能否同步到其他节点"><a href="#去另一个节点上查看topic，看能否同步到其他节点" class="headerlink" title="去另一个节点上查看topic，看能否同步到其他节点"></a>去另一个节点上查看topic，看能否同步到其他节点</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-topics.sh --list --zookeeper 172.20.60.110:2181</span><br></pre></td></tr></table></figure>
-
-<h5 id="运行一个生产者"><a href="#运行一个生产者" class="headerlink" title="运行一个生产者"></a>运行一个生产者</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-console-producer.sh --broker-list 172.20.60.110:9092,172.20.60.108:9092 --topic test108</span><br></pre></td></tr></table></figure>
-
-<h5 id="运行一个消费者"><a href="#运行一个消费者" class="headerlink" title="运行一个消费者"></a>运行一个消费者</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-console-consumer.sh --from-beginning --topic test108 --bootstrap-server 172.20.60.110:9092,172.20.60.108:9092</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/06/30/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BAkafka%E9%9B%86%E7%BE%A4/" data-id="cl50u797o0000rkfcdnsfdulg" data-title="Ubuntu服务器搭建kafka集群" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/06/30/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2022-06-30T05:36:03.556Z" itemprop="datePublished">2022-06-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/06/30/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/06/30/hello-world/" data-id="cl50u797u0002rkfcgomn15b0" data-title="Hello World" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2022/06/30/Redis%E5%88%97%E8%A1%A8%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" data-id="cl50un8f80001nwfc2kcw3dt0" data-title="Redis列表相关命令" class="article-share-link">Share</a>
       
       
       
@@ -255,6 +131,13 @@
           <aside id="sidebar">
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+    </div>
+  </div>
+
 
   
     
@@ -280,14 +163,6 @@
         
           <li>
             <a href="/2022/06/30/Redis%E5%88%97%E8%A1%A8%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">Redis列表相关命令</a>
-          </li>
-        
-          <li>
-            <a href="/2022/06/30/Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BAkafka%E9%9B%86%E7%BE%A4/">Ubuntu服务器搭建kafka集群</a>
-          </li>
-        
-          <li>
-            <a href="/2022/06/30/hello-world/">Hello World</a>
           </li>
         
       </ul>
